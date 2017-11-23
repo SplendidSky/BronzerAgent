@@ -20,7 +20,7 @@ public class ConnectService extends Service {
     public static Boolean mainThreadFlag = true;
     public static Boolean ioThreadFlag = true;
     ServerSocket serverSocket = null;
-    final int SERVER_PORT = 10086;
+    final int SERVER_PORT = 15831;
 
     @Nullable
     @Override
