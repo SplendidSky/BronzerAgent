@@ -1,11 +1,13 @@
 package com.splendidsky.bronzeragent;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * Created by 伟宸 on 2017/11/22.
@@ -15,6 +17,11 @@ public class ThreadReadWriterIOSocket implements Runnable {
 
     private Socket client;
     private Context context;
+
+    private final int BUFFER_SIZE = 1024;
+
+    private final String TAG = "ReadWriterIOSocket";
+    private final String WELCOME_MSG = "Connected successful\n";
 
     public ThreadReadWriterIOSocket(Context context, Socket client)
     {
@@ -31,6 +38,10 @@ public class ThreadReadWriterIOSocket implements Runnable {
 
             out = new BufferedOutputStream(client.getOutputStream());
             in = new BufferedInputStream(client.getInputStream());
+
+            out.write(WELCOME_MSG.getBytes());
+            out.flush();
+
             ConnectService.ioThreadFlag = true;
             while (ConnectService.ioThreadFlag){
                 try {
@@ -39,6 +50,17 @@ public class ThreadReadWriterIOSocket implements Runnable {
                         break;
                     }
 
+                    byte[] bytes = new byte[BUFFER_SIZE];
+                    int n = in.read(bytes);
+                    String cmd = new String(bytes, 0, n);
+                    Log.d(TAG, cmd);
+
+                    String response = cmd + " successful";
+                    out.write(response.getBytes());
+                    out.flush();
+
+                    Scanner scanner = new Scanner(System.in);
+                    scanner.next();
                 }
                 catch (Exception e)
                 {

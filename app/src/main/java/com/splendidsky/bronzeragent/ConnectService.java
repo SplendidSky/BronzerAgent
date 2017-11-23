@@ -57,6 +57,7 @@ public class ConnectService extends Service {
             serverSocket = new ServerSocket(SERVER_PORT);
             while (mainThreadFlag)
             {
+                Log.d(TAG, "Listening");
                 Socket socket = serverSocket.accept();
                 new Thread(new ThreadReadWriterIOSocket(this, socket)).start();
             }
