@@ -21,7 +21,7 @@ public class ThreadReadWriterIOSocket implements Runnable {
     private final int BUFFER_SIZE = 1024;
 
     public static final String TAG = "ReadWriterIOSocket";
-    public static final String WELCOME_MSG = "Connected successful\n";
+    public static final String WELCOME_MSG = "Connected successful";
 
     public ThreadReadWriterIOSocket(Context context, Socket client)
     {
@@ -55,12 +55,14 @@ public class ThreadReadWriterIOSocket implements Runnable {
                     String cmd = new String(bytes, 0, n);
                     Log.d(TAG, cmd);
 
-                    String response = cmd + " successful";
+                    if (cmd.equalsIgnoreCase("exit")) {
+                        ConnectService.ioThreadFlag = false;
+                    }
+
+                    String response = RemoteCmdHandler.handle(cmd);
                     out.write(response.getBytes());
                     out.flush();
 
-                    Scanner scanner = new Scanner(System.in);
-                    scanner.next();
                 }
                 catch (Exception e)
                 {
