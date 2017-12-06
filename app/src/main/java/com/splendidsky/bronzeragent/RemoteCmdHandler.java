@@ -20,7 +20,7 @@ public class RemoteCmdHandler {
         StringBuilder rntMsg = new StringBuilder();
         if(cmd.equalsIgnoreCase("list")) {
             List<AppInfo> appInfos = new ArrayList<>();
-            appInfos = AppTool.getInstallApps(AppApplication.getInstance().getPackageManager());
+            appInfos = AppTool.getInstallApps();
             for (AppInfo appInfo : appInfos) {
                 rntMsg.append(appInfo.getAppName()).append("\n");
             }
