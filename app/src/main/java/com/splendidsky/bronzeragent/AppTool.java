@@ -2,8 +2,11 @@ package com.splendidsky.bronzeragent;
 
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ComponentInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ServiceInfo;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -53,17 +56,57 @@ public class AppTool {
 
     public static List<ActivityInfo> getActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-        return Arrays.asList(packageInfo.activities);
+        return new ArrayList<>(Arrays.asList(packageInfo.activities));
     }
 
+    public static List<ServiceInfo> getServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
+        PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_SERVICES);
+        return new ArrayList<>(Arrays.asList(packageInfo.services));
+    }
+
+    public static List<ActivityInfo> getReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
+        PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_RECEIVERS);
+        return new ArrayList<>(Arrays.asList(packageInfo.receivers));
+    }
+
+    public static List<ProviderInfo> getProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
+        PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_PROVIDERS);
+        return new ArrayList<>(Arrays.asList(packageInfo.providers));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<?> pickExportComponentInfos(List<?> componentInfos) {
+        List<ComponentInfo> exportComponentInfos = new ArrayList<>();
+        for (ComponentInfo componentInfo : (List<ComponentInfo>)componentInfos) {
+            if (componentInfo.exported) {
+                exportComponentInfos.add(componentInfo);
+            }
+        }
+        return exportComponentInfos;
+    }
+
+    @SuppressWarnings("unchecked")
     public static List<ActivityInfo> getExportActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ActivityInfo> activityInfos = getActivityInfos(packageName);
-        List<ActivityInfo> exportActivityInfos = new ArrayList<>();
-        for (ActivityInfo activityInfo : activityInfos) {
-//            if (activityInfo.flags & ActivityInfo.EX)
-            //TODO
-        }
-        return null;
+        return (List<ActivityInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(activityInfos));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<ServiceInfo> getExportServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ServiceInfo> serviceInfos = getServiceInfos(packageName);
+        return (List<ServiceInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(serviceInfos));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<ActivityInfo> getExportReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ActivityInfo> receiverInfos = getReceiverInfos(packageName);
+        return (List<ActivityInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(receiverInfos));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<ProviderInfo> getExportProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ProviderInfo> providerInfos = getProviderInfos(packageName);
+        return (List<ProviderInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(providerInfos));
     }
 
 

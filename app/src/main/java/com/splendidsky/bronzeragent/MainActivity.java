@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 //                textView.setText("true");
 //            else
 //                textView.setText("false");
-            textView.setText(AppTool.getActivityInfos("com.splendidsky.bronzeragent").toString());
+            textView.setText(AppTool.getExportReceiverInfos("com.splendidsky.bronzeragent").toString());
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
