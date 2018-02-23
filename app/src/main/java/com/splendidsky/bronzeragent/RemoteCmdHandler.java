@@ -7,13 +7,17 @@ import android.content.pm.ServiceInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by 伟宸 on 2017/12/5.
  */
 
+/**
+ * Handle cmds from PC
+ *
+ * @author Weichen Chen
+ */
 public class RemoteCmdHandler {
     private static String TAG = "RemoteCmdHandler";
 
@@ -33,29 +37,29 @@ public class RemoteCmdHandler {
             }
         }
 
-        else if (action.equalsIgnoreCase("scan")) {
+        else if (action.equalsIgnoreCase("attacksurface")) {
             String packageName = "";
             try {
                 packageName = tokens[1];
-                List<ActivityInfo> exportActivityInfos = AppTool.getExportActivityInfos(packageName);
+                List<ActivityInfo> exportActivityInfos = AppTool.getExportedActivityInfos(packageName);
                 rntMsg.append("Exported activity:\n");
                 for(ActivityInfo activityInfo : exportActivityInfos) {
                     rntMsg.append(activityInfo.name).append("\n");;
                 }
 
-                List<ServiceInfo> exportServiceInfos = AppTool.getExportServiceInfos(packageName);
+                List<ServiceInfo> exportServiceInfos = AppTool.getExportedServiceInfos(packageName);
                 rntMsg.append("Exported service:\n");
                 for(ServiceInfo serviceInfo : exportServiceInfos) {
                     rntMsg.append(serviceInfo.name).append("\n");
                 }
 
-                List<ActivityInfo> exportReceiverInfos = AppTool.getExportReceiverInfos(packageName);
+                List<ActivityInfo> exportReceiverInfos = AppTool.getExportedReceiverInfos(packageName);
                 rntMsg.append("Exported receiver:\n");
                 for(ActivityInfo receiverInfo : exportReceiverInfos) {
                     rntMsg.append(receiverInfo.name).append("\n");
                 }
 
-                List<ProviderInfo> exportProviderInfos = AppTool.getExportProviderInfos(packageName);
+                List<ProviderInfo> exportProviderInfos = AppTool.getExportedProviderInfos(packageName);
                 rntMsg.append("Exported provider:\n");
                 for(ProviderInfo providerInfo : exportProviderInfos) {
                     rntMsg.append(providerInfo.name).append("\n");

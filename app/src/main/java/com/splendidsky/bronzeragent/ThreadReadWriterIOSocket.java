@@ -20,8 +20,8 @@ public class ThreadReadWriterIOSocket implements Runnable {
 
     private final int BUFFER_SIZE = 1024;
 
-    public static final String TAG = "ReadWriterIOSocket";
-    public static final String WELCOME_MSG = "Connected successful";
+    private static final String TAG = "ReadWriterIOSocket";
+    private static final String WELCOME_MSG = "Connected successful";
 
     public ThreadReadWriterIOSocket(Context context, Socket client)
     {

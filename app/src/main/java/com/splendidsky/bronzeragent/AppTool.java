@@ -17,10 +17,21 @@ import java.util.List;
  * Created by 伟宸 on 2017/11/24.
  */
 
+/**
+ * Get installed/allowBackup apps and exported activities/services/receivers/providers
+ *
+ * @author Weichen Chen
+ */
 public class AppTool {
-    public static final String TAG = "AppTool";
+    private static final String TAG = "AppTool";
     private static PackageManager mPackageManager = AppApplication.getInstance().getPackageManager();
 
+
+    /**
+     * Get installed apps
+     *
+     * @return a List that consists of installed apps
+     */
     public static List<AppInfo> getInstallApps() {
         Log.d(TAG, "getInstallApps");
         List<AppInfo> appInfos = new ArrayList<AppInfo>();
@@ -28,7 +39,7 @@ public class AppTool {
             List<PackageInfo> packageInfos = mPackageManager.getInstalledPackages(0);
             for (int i = 0; i < packageInfos.size(); i++) {
                 PackageInfo packageInfo = packageInfos.get(i);
-                //过滤掉系统app
+                // 过滤掉系统app
 //              if ((ApplicationInfo.FLAG_SYSTEM & packageInfo.applicationInfo.flags) != 0) {
 //                continue;
 //              }
@@ -46,6 +57,13 @@ public class AppTool {
         return appInfos;
     }
 
+    /**
+     * Check if an app is allowed backup
+     *
+     * @param packageName a string
+     * @return a boolean
+     * @exception PackageManager.NameNotFoundException
+     */
     public static boolean isAllowBackup(String packageName) throws PackageManager.NameNotFoundException {
         Log.d(TAG, "isAllowBackup");
         ApplicationInfo applicationInfo = mPackageManager.getApplicationInfo(packageName, 0);
@@ -54,28 +72,62 @@ public class AppTool {
         return false;
     }
 
+    /**
+     * Get activities of an app
+     *
+     * @param packageName a string
+     * @return a List that consists of activities
+     * @exception PackageManager.NameNotFoundException
+     */
     public static List<ActivityInfo> getActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
         return new ArrayList<>(Arrays.asList(packageInfo.activities));
     }
 
+    /**
+     * Get services of an app
+     *
+     * @param packageName a string
+     * @return a List that consists of services
+     * @exception PackageManager.NameNotFoundException
+     */
     public static List<ServiceInfo> getServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_SERVICES);
         return new ArrayList<>(Arrays.asList(packageInfo.services));
     }
 
+    /**
+     * Get receivers of an app
+     *
+     * @param packageName a string
+     * @return a List that consists of receivers
+     * @exception PackageManager.NameNotFoundException
+     */
     public static List<ActivityInfo> getReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_RECEIVERS);
         return new ArrayList<>(Arrays.asList(packageInfo.receivers));
     }
 
+    /**
+     * Get providers of an app
+     *
+     * @param packageName a string
+     * @return a List that consists of providers
+     * @exception PackageManager.NameNotFoundException
+     */
     public static List<ProviderInfo> getProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_PROVIDERS);
         return new ArrayList<>(Arrays.asList(packageInfo.providers));
     }
 
+    /**
+     * Get exported components of an app
+     *
+     * @param componentInfos a List
+     * @return a List that consists of exported components
+     */
     @SuppressWarnings("unchecked")
-    public static List<?> pickExportComponentInfos(List<?> componentInfos) {
+    public static List<?> pickExportedComponentInfos(List<?> componentInfos) {
         List<ComponentInfo> exportComponentInfos = new ArrayList<>();
         for (ComponentInfo componentInfo : (List<ComponentInfo>)componentInfos) {
             if (componentInfo.exported) {
@@ -85,28 +137,52 @@ public class AppTool {
         return exportComponentInfos;
     }
 
+    /**
+     * Get exported components of an app
+     *
+     * @param packageName a String
+     * @return a List that consists of exported components
+     */
     @SuppressWarnings("unchecked")
-    public static List<ActivityInfo> getExportActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
+    public static List<ActivityInfo> getExportedActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ActivityInfo> activityInfos = getActivityInfos(packageName);
-        return (List<ActivityInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(activityInfos));
+        return (List<ActivityInfo>) pickExportedComponentInfos(new ArrayList<ComponentInfo>(activityInfos));
     }
 
+    /**
+     * Get exported services of an app
+     *
+     * @param packageName a String
+     * @return a List that consists of exported services
+     */
     @SuppressWarnings("unchecked")
-    public static List<ServiceInfo> getExportServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
+    public static List<ServiceInfo> getExportedServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ServiceInfo> serviceInfos = getServiceInfos(packageName);
-        return (List<ServiceInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(serviceInfos));
+        return (List<ServiceInfo>) pickExportedComponentInfos(new ArrayList<ComponentInfo>(serviceInfos));
     }
 
+    /**
+     * Get exported receivers of an app
+     *
+     * @param packageName a String
+     * @return a List that consists of exported receivers
+     */
     @SuppressWarnings("unchecked")
-    public static List<ActivityInfo> getExportReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
+    public static List<ActivityInfo> getExportedReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ActivityInfo> receiverInfos = getReceiverInfos(packageName);
-        return (List<ActivityInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(receiverInfos));
+        return (List<ActivityInfo>) pickExportedComponentInfos(new ArrayList<ComponentInfo>(receiverInfos));
     }
 
+    /**
+     * Get exported providers of an app
+     *
+     * @param packageName a String
+     * @return a List that consists of exported providers
+     */
     @SuppressWarnings("unchecked")
-    public static List<ProviderInfo> getExportProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
+    public static List<ProviderInfo> getExportedProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ProviderInfo> providerInfos = getProviderInfos(packageName);
-        return (List<ProviderInfo>) pickExportComponentInfos(new ArrayList<ComponentInfo>(providerInfos));
+        return (List<ProviderInfo>) pickExportedComponentInfos(new ArrayList<ComponentInfo>(providerInfos));
     }
 
 
