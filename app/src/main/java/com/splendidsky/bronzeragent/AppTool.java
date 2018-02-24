@@ -80,8 +80,12 @@ public class AppTool {
      * @exception PackageManager.NameNotFoundException
      */
     public static List<ActivityInfo> getActivityInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ActivityInfo> activityInfos = new ArrayList<>();
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-        return new ArrayList<>(Arrays.asList(packageInfo.activities));
+        if (packageInfo.activities != null) {
+            activityInfos.addAll(Arrays.asList(packageInfo.activities));
+        }
+        return activityInfos;
     }
 
     /**
@@ -92,8 +96,12 @@ public class AppTool {
      * @exception PackageManager.NameNotFoundException
      */
     public static List<ServiceInfo> getServiceInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ServiceInfo> serviceInfos = new ArrayList<>();
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_SERVICES);
-        return new ArrayList<>(Arrays.asList(packageInfo.services));
+        if (packageInfo.services != null) {
+            serviceInfos.addAll(Arrays.asList(packageInfo.services));
+        }
+        return serviceInfos;
     }
 
     /**
@@ -104,8 +112,12 @@ public class AppTool {
      * @exception PackageManager.NameNotFoundException
      */
     public static List<ActivityInfo> getReceiverInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ActivityInfo> receiverInfos = new ArrayList<>();
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_RECEIVERS);
-        return new ArrayList<>(Arrays.asList(packageInfo.receivers));
+        if (packageInfo.receivers != null) {
+            receiverInfos.addAll(Arrays.asList(packageInfo.receivers));
+        }
+        return receiverInfos;
     }
 
     /**
@@ -116,8 +128,12 @@ public class AppTool {
      * @exception PackageManager.NameNotFoundException
      */
     public static List<ProviderInfo> getProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
+        List<ProviderInfo> providerInfos = new ArrayList<>();
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_PROVIDERS);
-        return new ArrayList<>(Arrays.asList(packageInfo.providers));
+        if (packageInfo.providers != null) {
+            providerInfos.addAll(Arrays.asList(packageInfo.providers));
+        }
+        return providerInfos;
     }
 
     /**
