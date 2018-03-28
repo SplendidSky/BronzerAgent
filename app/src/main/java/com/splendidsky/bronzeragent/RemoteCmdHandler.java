@@ -70,6 +70,13 @@ public class RemoteCmdHandler {
 
         }
 
+        else if (action.equalsIgnoreCase("assess")) {
+            List<AppInfo> appInfos = AppTool.getInstallApps();
+            for (AppInfo appInfo : appInfos) {
+                // TODO
+            }
+        }
+
         Log.d(TAG, rntMsg.toString());
         return rntMsg.toString();
     }

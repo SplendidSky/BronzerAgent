@@ -5,13 +5,17 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ComponentInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by 伟宸 on 2017/11/24.
@@ -199,6 +203,32 @@ public class AppTool {
     public static List<ProviderInfo> getExportedProviderInfos(String packageName) throws PackageManager.NameNotFoundException {
         List<ProviderInfo> providerInfos = getProviderInfos(packageName);
         return (List<ProviderInfo>) pickExportedComponentInfos(new ArrayList<ComponentInfo>(providerInfos));
+    }
+
+    /**
+     * Get exported providers of an app
+     *
+     * @param packageName a String
+     * @return a boolean indicating the app is protected or not
+     */
+    public static boolean isProtected(String packageName) throws PackageManager.NameNotFoundException {
+        PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+        PermissionInfo[] permissionInfos = packageInfo.permissions;
+        for (PermissionInfo permissionInfo : permissionInfos) {
+            if (permissionInfo.protectionLevel == PermissionInfo.PROTECTION_SIGNATURE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get exported providers of an app
+     *
+     * @return a boolean indicating the device is vulnerable to Webview RCE
+     */
+    public static boolean isWebviewRCE() throws PackageManager.NameNotFoundException {
+        return Build.VERSION.SDK_INT < 19;
     }
 
 
