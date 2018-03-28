@@ -7,6 +7,7 @@ import android.content.pm.ServiceInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,9 +73,27 @@ public class RemoteCmdHandler {
 
         else if (action.equalsIgnoreCase("assess")) {
             List<AppInfo> appInfos = AppTool.getInstallApps();
-            for (AppInfo appInfo : appInfos) {
-                // TODO
+            List<String> notProtectedApp = new ArrayList<>();
+            List<String> allowBackupApp = new ArrayList<>();
+            boolean WebviewRCE = false;
+
+            try {
+                for (AppInfo appInfo : appInfos) {
+                    if (!AppTool.isProtected(appInfo.getAppName())) {
+                        notProtectedApp.add(appInfo.getAppName());
+                    }
+                    if (AppTool.isAllowBackup(appInfo.getAppName())) {
+                        allowBackupApp.add(appInfo.getAppName());
+                    }
+                    if (AppTool.isWebviewRCE()) {
+                        WebviewRCE = true;
+                    }
+                }
             }
+            catch (PackageManager.NameNotFoundException e) {
+
+            }
+
         }
 
         Log.d(TAG, rntMsg.toString());
