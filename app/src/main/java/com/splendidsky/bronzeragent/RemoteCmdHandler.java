@@ -45,7 +45,7 @@ public class RemoteCmdHandler {
                 List<ActivityInfo> exportActivityInfos = AppTool.getExportedActivityInfos(packageName);
                 rntMsg.append("Exported activity:\n");
                 for(ActivityInfo activityInfo : exportActivityInfos) {
-                    rntMsg.append(activityInfo.name).append("\n");;
+                    rntMsg.append(activityInfo.name).append("\n");
                 }
                 rntMsg.append("\n");
 
@@ -101,9 +101,31 @@ public class RemoteCmdHandler {
                     WebviewRCE = true;
                     Log.d(TAG, "Device is vulnerable to Webview RCE.");
                 }
-            }
-            catch (PackageManager.NameNotFoundException e) {
 
+
+                if (!notProtectedApps.isEmpty()) {
+                    rntMsg.append("The following Apps may be called beyond authority:\n");
+                }
+                for (String notProtectedApp : notProtectedApps) {
+                    rntMsg.append(notProtectedApp);
+                    rntMsg.append("\n");
+                }
+
+                if (!allowBackupApps.isEmpty()) {
+                    rntMsg.append("The following Apps are allowed backup:\n");
+                }
+                for (String allowBackupApp : allowBackupApps) {
+                    rntMsg.append(allowBackupApp);
+                    rntMsg.append("\n");
+                }
+
+                if (WebviewRCE) {
+                    rntMsg.append("The device is vulnerable to Webview RCE.");
+                }
+            }
+
+            catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
             }
 
         }
