@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 //                textView.setText("true");
 //            else
 //                textView.setText("false");
-            textView.setText(AppTool.getExportedReceiverInfos("com.splendidsky.bronzeragent").toString());
-        } catch (PackageManager.NameNotFoundException e) {
+            textView.setText(RemoteCmdHandler.handle("assess"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

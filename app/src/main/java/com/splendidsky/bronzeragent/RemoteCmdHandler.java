@@ -47,24 +47,29 @@ public class RemoteCmdHandler {
                 for(ActivityInfo activityInfo : exportActivityInfos) {
                     rntMsg.append(activityInfo.name).append("\n");;
                 }
+                rntMsg.append("\n");
 
                 List<ServiceInfo> exportServiceInfos = AppTool.getExportedServiceInfos(packageName);
                 rntMsg.append("Exported service:\n");
                 for(ServiceInfo serviceInfo : exportServiceInfos) {
                     rntMsg.append(serviceInfo.name).append("\n");
                 }
+                rntMsg.append("\n");
 
                 List<ActivityInfo> exportReceiverInfos = AppTool.getExportedReceiverInfos(packageName);
                 rntMsg.append("Exported receiver:\n");
                 for(ActivityInfo receiverInfo : exportReceiverInfos) {
                     rntMsg.append(receiverInfo.name).append("\n");
                 }
+                rntMsg.append("\n");
 
                 List<ProviderInfo> exportProviderInfos = AppTool.getExportedProviderInfos(packageName);
                 rntMsg.append("Exported provider:\n");
                 for(ProviderInfo providerInfo : exportProviderInfos) {
                     rntMsg.append(providerInfo.name).append("\n");
                 }
+                rntMsg.append("\n");
+
             } catch (PackageManager.NameNotFoundException e) {
                 rntMsg.append("Package " + packageName + " not found").append("\n");
             }
@@ -73,21 +78,28 @@ public class RemoteCmdHandler {
 
         else if (action.equalsIgnoreCase("assess")) {
             List<AppInfo> appInfos = AppTool.getInstallApps();
-            List<String> notProtectedApp = new ArrayList<>();
-            List<String> allowBackupApp = new ArrayList<>();
+            List<String> notProtectedApps = new ArrayList<>();
+            List<String> allowBackupApps = new ArrayList<>();
             boolean WebviewRCE = false;
 
             try {
                 for (AppInfo appInfo : appInfos) {
+                    if (appInfo.getAppName().contains("android")) {
+                        continue;
+                    }
                     if (!AppTool.isProtected(appInfo.getAppName())) {
-                        notProtectedApp.add(appInfo.getAppName());
+                        notProtectedApps.add(appInfo.getAppName());
+                        Log.d(TAG, "not protected app: " + appInfo.getAppName());
                     }
                     if (AppTool.isAllowBackup(appInfo.getAppName())) {
-                        allowBackupApp.add(appInfo.getAppName());
+                        allowBackupApps.add(appInfo.getAppName());
+                        Log.d(TAG, "allow backup app:  " + appInfo.getAppName());
                     }
-                    if (AppTool.isWebviewRCE()) {
-                        WebviewRCE = true;
-                    }
+
+                }
+                if (AppTool.isWebviewRCE()) {
+                    WebviewRCE = true;
+                    Log.d(TAG, "Device is vulnerable to Webview RCE.");
                 }
             }
             catch (PackageManager.NameNotFoundException e) {

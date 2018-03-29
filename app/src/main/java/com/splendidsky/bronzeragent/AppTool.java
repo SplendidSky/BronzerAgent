@@ -213,7 +213,18 @@ public class AppTool {
      */
     public static boolean isProtected(String packageName) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+        if (getExportedActivityInfos(packageName) == null
+                && getExportedProviderInfos(packageName) == null
+                && getExportedReceiverInfos(packageName) == null
+                && getExportedServiceInfos(packageName) == null) {
+            return true;
+        }
         PermissionInfo[] permissionInfos = packageInfo.permissions;
+
+        if (permissionInfos == null) {
+            return false;
+        }
+
         for (PermissionInfo permissionInfo : permissionInfos) {
             if (permissionInfo.protectionLevel == PermissionInfo.PROTECTION_SIGNATURE) {
                 return true;
