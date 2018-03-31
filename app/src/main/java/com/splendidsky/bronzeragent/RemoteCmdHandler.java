@@ -34,6 +34,9 @@ public class RemoteCmdHandler {
         if(action.equalsIgnoreCase("list")) {
             List<AppInfo> appInfos = AppTool.getInstallApps();
             for (AppInfo appInfo : appInfos) {
+//                if (appInfo.getAppName().contains("android")) {
+//                    continue;
+//                }
                 rntMsg.append(appInfo.getAppName()).append("\n");
             }
         }
@@ -84,9 +87,9 @@ public class RemoteCmdHandler {
 
             try {
                 for (AppInfo appInfo : appInfos) {
-                    if (appInfo.getAppName().contains("android")) {
-                        continue;
-                    }
+//                    if (appInfo.getAppName().contains("android")) {
+//                        continue;
+//                    }
                     if (!AppTool.isProtected(appInfo.getAppName())) {
                         notProtectedApps.add(appInfo.getAppName());
                         Log.d(TAG, "not protected app: " + appInfo.getAppName());
@@ -128,7 +131,40 @@ public class RemoteCmdHandler {
                     e.printStackTrace();
             }
 
+
         }
+
+        else if (action.equalsIgnoreCase("_exported_activities")) {
+            String packageName = "";
+            rntMsg.append("placeholder\n");
+            try {
+                packageName = tokens[1];
+                List<ActivityInfo> exportActivityInfos = AppTool.getExportedActivityInfos(packageName);
+                for (ActivityInfo exportedActivityInfo : exportActivityInfos) {
+                    rntMsg.append(exportedActivityInfo.name).append("\n");
+                }
+            }
+            catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if (action.equalsIgnoreCase("_exported_services")) {
+            String packageName = "";
+            rntMsg.append("placeholder\n");
+            try {
+                packageName = tokens[1];
+                List<ServiceInfo> exportExportedInfos = AppTool.getExportedServiceInfos(packageName);
+                for (ServiceInfo exportExportedInfo : exportExportedInfos) {
+                    rntMsg.append(exportExportedInfo.name).append("\n");
+                }
+            }
+            catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
         Log.d(TAG, rntMsg.toString());
         return rntMsg.toString();

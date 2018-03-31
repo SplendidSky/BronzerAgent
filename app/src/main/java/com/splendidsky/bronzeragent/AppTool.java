@@ -44,9 +44,9 @@ public class AppTool {
             for (int i = 0; i < packageInfos.size(); i++) {
                 PackageInfo packageInfo = packageInfos.get(i);
                 // 过滤掉系统app
-//              if ((ApplicationInfo.FLAG_SYSTEM & packageInfo.applicationInfo.flags) != 0) {
-//                continue;
-//              }
+              if ((ApplicationInfo.FLAG_SYSTEM & packageInfo.applicationInfo.flags) != 0) {
+                continue;
+              }
                 AppInfo appInfo = new AppInfo();
                 appInfo.setAppName(packageInfo.packageName);
                 if (packageInfo.applicationInfo.loadIcon(mPackageManager) == null) {
